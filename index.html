@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#172554">
+  <meta name="description" content="Formulario local para preparar fichas y compartirlas manualmente.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ficha privada">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Ficha privada</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">F</div>
+      <div>
+        <p class="eyebrow">HERRAMIENTA LOCAL</p>
+        <h1>Ficha privada</h1>
+      </div>
+      <span class="privacy-pill"><span></span> Sin cuenta</span>
+    </header>
+
+    <noscript><p class="noscript">Esta aplicación necesita JavaScript para generar la ficha.</p></noscript>
+
+    <section id="form-view" class="view">
+      <div class="intro">
+        <h2 id="form-title" tabindex="-1">Nueva ficha</h2>
+        <p>Rellena los datos que necesites. Todos los campos son opcionales.</p>
+      </div>
+      <form id="record-form" autocomplete="off" novalidate>
+        <div class="field-grid">
+          <label class="field full"><span>Asunto</span><input id="campo-01" type="text" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" enterkeyhint="next" placeholder="Escribe el asunto"></label>
+          <label class="field full"><span>Implicado</span><input id="campo-02" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Escribe el implicado"></label>
+          <label class="field full"><span>Nombre</span><input id="campo-03" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre y apellidos"></label>
+          <label class="field"><span>DNI</span><input id="campo-04" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="DNI / NIE"></label>
+          <label class="field"><span>Tfno</span><input id="campo-05" type="text" inputmode="tel" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Número de teléfono"></label>
+          <label class="field full"><span>Dirección</span><input id="campo-06" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Dirección completa"></label>
+          <label class="field full"><span>F.Nac y lugar nac</span><input id="campo-07" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Fecha y lugar de nacimiento"></label>
+          <label class="field"><span>Matrícula</span><input id="campo-08" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Matrícula"></label>
+          <label class="field"><span>Correo electrónico</span><input id="campo-09" type="text" inputmode="email" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="correo@ejemplo.com"></label>
+          <label class="field full"><span>N.º póliza y compañía</span><input id="campo-10" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Número de póliza y compañía"></label>
+          <label class="field full"><span>Validez permiso</span><input id="campo-11" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Fecha de validez"></label>
+          <label class="field full"><span>Nombres padre y madre</span><input id="campo-12" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre del padre y de la madre"></label>
+          <label class="field full"><span>Municipio y provincia</span><input id="campo-13" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Municipio y provincia"></label>
+        </div>
+        <div class="form-actions">
+          <button class="button button-primary" type="submit">Finalizar <span aria-hidden="true">→</span></button>
+          <button class="button button-quiet" id="clear-form" type="button">Vaciar formulario</button>
+        </div>
+      </form>
+      <p class="local-note">Los datos solo existen en esta pantalla mientras la usas. Esta aplicación no los guarda ni los envía a ningún servidor.</p>
+      <details class="notice">
+        <summary>Qué no controla esta aplicación</summary>
+        <ul>
+          <li>El teclado de iOS puede tener sus propias sugerencias.</li>
+          <li>Las capturas de pantalla pueden mostrar los datos.</li>
+          <li>El portapapeles conserva el texto copiado hasta que lo sustituyas.</li>
+          <li>Telegram, WhatsApp y otras aplicaciones gestionan lo que reciben según sus propias políticas. Una vez entregado el texto, no se puede garantizar su borrado.</li>
+          <li>El alojamiento de la web puede registrar datos técnicos de la visita (IP, recursos solicitados), pero nunca el contenido del formulario.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="result-view" class="view" hidden>
+      <div class="intro">
+        <button class="back-link" id="edit-button" type="button">← Volver al formulario</button>
+        <h2 id="result-title" tabindex="-1">Revisa la ficha</h2>
+        <p>Se muestran todos los campos. Los que no hayas rellenado aparecerán vacíos.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-heading">
+          <div><p class="eyebrow">VISTA PREVIA</p><h3>Texto que se va a compartir</h3></div>
+          <span class="local-tag">Solo en este dispositivo</span>
+        </div>
+        <pre id="result-text" class="result-text"></pre>
+      </div>
+      <div class="result-actions">
+        <button class="button button-primary" id="copy-button" type="button">Copiar texto</button>
+        <button class="button button-secondary" id="share-button" type="button">Compartir</button>
+        <button class="button button-quiet" id="new-button" type="button">Nueva ficha · borrar datos</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p class="local-note">Al compartir, el menú de iOS y la aplicación que elijas reciben el texto. Comprueba el destinatario antes de enviarlo.</p>
+    </section>
+
+    <footer>Ficha privada · No almacena historiales</footer>
+  </main>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
