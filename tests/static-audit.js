@@ -43,6 +43,13 @@ check("HTML sin recursos externos (src/href absolutos)", ![...html.matchAll(/\b(
 
 const inputs = [...html.matchAll(/<input\b[^>]*>/g)].map((m) => m[0]);
 check("17 campos de formulario", inputs.length === 17, `hay ${inputs.length}`);
+check(
+  "17 campos: 15 de texto y 2 de fecha (campo-07 y campo-13)",
+  inputs.filter((i) => /\btype="text"/.test(i)).length === 15 &&
+  inputs.filter((i) => /\btype="date"/.test(i)).length === 2 &&
+  /<input[^>]*id="campo-07"[^>]*type="date"/.test(html) &&
+  /<input[^>]*id="campo-13"[^>]*type="date"/.test(html)
+);
 check("autocomplete=\"off\" en el formulario y en cada campo",
   /<form[^>]*autocomplete="off"/.test(html) && inputs.every((i) => /autocomplete="off"/.test(i)));
 check("autocorrect=off y spellcheck=false en cada campo", inputs.every((i) => /autocorrect="off"/.test(i) && /spellcheck="false"/.test(i)));
