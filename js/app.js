@@ -47,6 +47,8 @@
   const status = document.getElementById("status");
   const copyButton = document.getElementById("copy-button");
   const inputs = FIELDS.map(([id]) => document.getElementById(id));
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
 
   // Único estado de la aplicación: vive en memoria y en el DOM. Nunca se persiste.
   let currentText = "";
@@ -171,6 +173,35 @@
       setStatus(error && error.name === "AbortError" ? "" : MSG.shareFailed);
     }
   }
+
+  // Tema visual: solo existe en memoria y comienza siempre en modo claro.
+  let darkMode = false;
+
+  function updateTheme() {
+    document.documentElement.dataset.theme = darkMode ? "dark" : "light";
+
+    themeToggle.textContent = darkMode ? "☀" : "☾";
+    themeToggle.setAttribute("aria-pressed", String(darkMode));
+
+    const label = darkMode
+      ? "Activar modo claro"
+      : "Activar modo oscuro";
+
+    themeToggle.setAttribute("aria-label", label);
+    themeToggle.setAttribute("title", label);
+
+    themeColor.setAttribute(
+      "content",
+      darkMode ? "#211C18" : "#F5EFE3"
+    );
+  }
+
+  themeToggle.addEventListener("click", () => {
+    darkMode = !darkMode;
+    updateTheme();
+  });
+
+  updateTheme();
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
