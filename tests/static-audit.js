@@ -42,11 +42,21 @@ check("HTML sin atributo required", !/\brequired\b/i.test(html));
 check("HTML sin recursos externos (src/href absolutos)", ![...html.matchAll(/\b(?:src|href)="([^"]+)"/g)].some((m) => /^(?:[a-z]+:)?\/\//i.test(m[1])));
 
 const inputs = [...html.matchAll(/<input\b[^>]*>/g)].map((m) => m[0]);
-check("13 campos de formulario", inputs.length === 13, `hay ${inputs.length}`);
+check("17 campos de formulario", inputs.length === 17, `hay ${inputs.length}`);
 check("autocomplete=\"off\" en el formulario y en cada campo",
   /<form[^>]*autocomplete="off"/.test(html) && inputs.every((i) => /autocomplete="off"/.test(i)));
 check("autocorrect=off y spellcheck=false en cada campo", inputs.every((i) => /autocorrect="off"/.test(i) && /spellcheck="false"/.test(i)));
 check("campos sin atributo name (sin heurísticas de autorrelleno)", inputs.every((i) => !/\sname=/.test(i)));
+
+const EXPECTED = ["Asunto", "Implicado", "Nombre", "DNI", "Teléfono", "Dirección", "Fecha de nacimiento", "Lugar de nacimiento", "Matrícula", "Correo electrónico", "N.º de póliza", "Compañía", "Validez permiso", "Nombre padre", "Nombre madre", "Municipio", "Provincia"];
+const htmlFields = [...html.matchAll(/<label class="field[^"]*"><span>([^<]+)<\/span><input id="(campo-\d\d)"/g)].map((m) => [m[2], m[1]]);
+check("HTML: 17 etiquetas visibles, en el orden y con el texto acordados", JSON.stringify(htmlFields.map((f) => f[1])) === JSON.stringify(EXPECTED), htmlFields.map((f) => f[1]).join(" | "));
+check("HTML: identificadores campo-01 … campo-17 consecutivos y sin repetir", htmlFields.every((f, i) => f[0] === "campo-" + String(i + 1).padStart(2, "0")));
+check("HTML: sin etiquetas antiguas de campos agrupados", !/Tfno|F\.Nac|póliza y compañía|padre y madre|Municipio y provincia/i.test(html));
+check("HTML: sin la etiqueta «Sin cuenta»", !/Sin cuenta|privacy-pill/.test(html));
+check("HTML: sin el apartado «Qué no controla esta aplicación» ni sus puntos", !/Qué no controla|<details|class="notice"|sugerencias|capturas de pantalla pueden|sus propias políticas|registrar datos técnicos/i.test(html));
+check("HTML: se conserva el aviso de que los datos no se guardan ni se envían", /no los guarda ni los envía a ningún servidor/.test(html));
+check("CSS: sin reglas de elementos eliminados", !/privacy-pill|\.notice/.test(src["css/styles.css"]));
 
 const csp = (html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/) || [])[1] || "";
 const need = ["default-src 'self'", "script-src 'self'", "style-src 'self'", "img-src 'self' data:", "connect-src 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'none'"];
@@ -77,9 +87,9 @@ check("app.js: setStatus solo recibe constantes MSG o cadena vacía",
   [...src["js/app.js"].matchAll(/setStatus\(([^)]*)\)/g)].map((m) => m[1].trim())
     .filter((a) => !/^(MSG\.\w+|"")$/.test(a) && a !== "message" && !/^error && error\.name === "AbortError" \? "" : MSG\.shareFailed$/.test(a)).length === 0);
 check("app.js: share solo con { text }", /navigator\.share\(\{ text: currentText \}\)/.test(src["js/app.js"]));
-check("app.js: etiquetas de salida exactas", [
-  "Asunto", "Implicado", "Nombre", "DNI", "Tfno", "Dirección", "F.Nac y lugar nac", "Matrícula", "Correo electrónico",
-  "N.º póliza y compañía", "Validez permiso", "Nombres padre y madre", "Municipio y provincia"
+check("app.js: etiquetas de salida exactas y en orden", [
+  "Asunto", "Implicado", "Nombre", "DNI", "Teléfono", "Dirección", "Fecha de nacimiento", "Lugar de nacimiento", "Matrícula",
+  "Correo electrónico", "N.º de póliza", "Compañía", "Validez permiso", "Nombre padre", "Nombre madre", "Municipio", "Provincia"
 ].every((l, i) => src["js/app.js"].includes(`"campo-${String(i + 1).padStart(2, "0")}", "${l}"`)));
 
 // Manifest e iconos

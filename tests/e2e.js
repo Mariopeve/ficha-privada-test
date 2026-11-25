@@ -9,13 +9,15 @@ const { start } = require("./server");
 
 const ROOT = path.resolve(__dirname, "..");
 const TMP = process.env.FP_TMP || os.tmpdir();
-const LABELS = ["Asunto", "Implicado", "Nombre", "DNI", "Tfno", "Dirección", "F.Nac y lugar nac", "Matrícula",
-  "Correo electrónico", "N.º póliza y compañía", "Validez permiso", "Nombres padre y madre", "Municipio y provincia"];
+const LABELS = [
+  "Asunto", "Implicado", "Nombre", "DNI", "Teléfono", "Dirección", "Fecha de nacimiento", "Lugar de nacimiento", "Matrícula",
+  "Correo electrónico", "N.º de póliza", "Compañía", "Validez permiso", "Nombre padre", "Nombre madre", "Municipio", "Provincia"
+];
 const SENT = "ZZSENTINEL-4F7K";
 const FULL = LABELS.map((_, i) => `${SENT}-${i + 1} Ñandú Çü ª º € “q” <b>&amp;</b> ¿?¡!`);
 FULL[2] = `   ${FULL[2]}   `; // comprobar recorte de espacios
 const ids = LABELS.map((_, i) => `#campo-${String(i + 1).padStart(2, "0")}`);
-const CACHE_NAME = "ficha-privada-estatico-v2";
+const CACHE_NAME = "ficha-privada-estatico-v3";
 const STATIC = ["index.html", "css/styles.css", "js/app.js", "manifest.json", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 const results = [];
@@ -80,11 +82,11 @@ async function main() {
 
   // --- Funcionales ---------------------------------------------------------------
   const labelsInHtml = await page.$$eval(".field > span", (els) => els.map((e) => e.textContent));
-  check("F0 Las 13 etiquetas visibles coinciden exactamente con la lista", JSON.stringify(labelsInHtml) === JSON.stringify(LABELS), labelsInHtml.join(" | "));
+  check("F0 Las 17 etiquetas visibles (orden y texto) coinciden exactamente con la lista", JSON.stringify(labelsInHtml) === JSON.stringify(LABELS), labelsInHtml.join(" | "));
 
   await page.click("button[type=submit]");
   let t = await resultText(page);
-  check("F1 Formulario vacío: se puede finalizar y salen las 13 etiquetas sin contenido", t === expectedText(Array(13).fill("")) && t.split("\n").length === 13, JSON.stringify(t.split("\n").slice(0, 3)) + "…");
+  check("F1 Formulario vacío: se puede finalizar y salen las 17 etiquetas sin contenido", t === expectedText(Array(LABELS.length).fill("")) && t.split("\n").length === LABELS.length, JSON.stringify(t.split("\n").slice(0, 3)) + "…");
   check("F1b Se muestra la vista de resultado y se oculta el formulario", (await visible(page, "#result-view")) && !(await visible(page, "#form-view")));
 
   await page.click("#edit-button");
@@ -92,11 +94,33 @@ async function main() {
   await page.fill(ids[3], "00000000T");
   await page.click("button[type=submit]");
   t = await resultText(page);
-  const partial = Array(13).fill(""); partial[2] = "Ficticio Ejemplo"; partial[3] = "00000000T";
+  const partial = Array(LABELS.length).fill(""); partial[2] = "Ficticio Ejemplo"; partial[3] = "00000000T";
   check("F2 Formulario parcial: campos rellenos y vacíos en su sitio", t === expectedText(partial));
 
   await page.click("#edit-button");
   check("F2b Al volver a modificar se conservan los datos", (await page.inputValue(ids[2])) === "Ficticio Ejemplo");
+  check("F2c Exactamente 17 campos de entrada, todos de texto y vacíos de origen", (await page.$$("input")).length === 17 && (await page.$$("input[type=text]")).length === 17);
+  check("F2d Se han eliminado la etiqueta «Sin cuenta» y el apartado «Qué no controla»; se conserva el aviso de datos",
+    !/Sin cuenta|Qué no controla|sugerencias de iOS|políticas/.test(await page.content()) && (await page.$$("details")).length === 0 &&
+    (await page.$eval(".local-note", (e) => e.textContent)).includes("no los guarda ni los envía a ningún servidor"));
+  // Campos separados: cada uno funciona de forma independiente del otro
+  page.once("dialog", (d) => d.accept());
+  await page.click("#clear-form");
+  const PAIRS = [[6, 7], [10, 11], [13, 14], [15, 16]];
+  for (const [a, b] of PAIRS) {
+    let ok = true;
+    for (const [x, y] of [[a, b], [b, a]]) {
+      const vals = Array(LABELS.length).fill(""); vals[x] = "Valor ficticio " + LABELS[x];
+      await page.fill(ids[x], vals[x]);
+      const otherEmpty = (await page.inputValue(ids[y])) === "";
+      await page.click("button[type=submit]");
+      const txt = await resultText(page);
+      ok = ok && otherEmpty && txt === expectedText(vals) && txt.split("\n")[y] === LABELS[y] + ":";
+      await page.click("#edit-button");
+      await page.fill(ids[x], "");
+    }
+    check(`F2e «${LABELS[a]}» y «${LABELS[b]}» son independientes (cada uno aparece solo y el otro sale vacío)`, ok);
+  }
   await fillAll(page, FULL);
   await page.click("button[type=submit]");
   t = await resultText(page);
@@ -150,7 +174,7 @@ async function main() {
   page.once("dialog", (d) => d.accept());
   await page.click("#new-button");
   const afterNew = await allValues(page);
-  check("F6b «Nueva ficha» vacía los 13 campos, el texto del resultado y vuelve al formulario",
+  check("F6b «Nueva ficha» vacía los 17 campos, el texto del resultado y vuelve al formulario",
     afterNew.every((v) => v === "") && (await page.$eval("#result-text", (e) => e.textContent)) === "" && (await visible(page, "#form-view")));
   await fillAll(page, FULL);
   page.once("dialog", (d) => d.accept());
@@ -253,7 +277,7 @@ async function main() {
       test("permitidaConQuery", "/icons/icon-192.png?dato=ZZSENTINEL-4F7K")
     ]).then(() => resolve(out));
   }));
-  const cacheAfter = await page.evaluate(async () => (await (await caches.open("ficha-privada-estatico-v2")).keys()).map((r) => r.url));
+  const cacheAfter = await page.evaluate(async () => (await (await caches.open("ficha-privada-estatico-v3")).keys()).map((r) => r.url));
   check("S7 Ruta no incluida en la lista: el SW responde sin ir a la red ni guardarla", probe.noPermitida === "error" && !srv.log.slice(logLenBefore).some((l) => l.includes("control.html")));
   check("S8 Recurso estático con parámetros: se sirve de caché, no llega al servidor y no se guarda con el parámetro",
     probe.permitidaConQuery === "ok" && !srv.log.slice(logLenBefore).some((l) => l.includes("ZZSENTINEL")) && cacheAfter.length === 7 && cacheAfter.every((u) => !u.includes("?")));
@@ -272,7 +296,7 @@ async function main() {
   await page.goto(base + "/").catch(() => {});
   let offlineOk = false;
   try {
-    offlineOk = (await page.title()) === "Ficha privada" && (await allValues(page)).length === 13;
+    offlineOk = (await page.title()) === "Ficha privada" && (await allValues(page)).length === LABELS.length;
     await fillAll(page, FULL);
     await page.click("button[type=submit]");
     offlineOk = offlineOk && (await resultText(page)) === expectedText(FULL);
@@ -321,18 +345,18 @@ async function main() {
   await p3.reload();
   await p3.evaluate(() => caches.open("otra-app-cache"));
   const swFile = path.join(upd, "service-worker.js");
-  fs.writeFileSync(swFile, fs.readFileSync(swFile, "utf8").replace("estatico-v2", "estatico-v3"));
+  fs.writeFileSync(swFile, fs.readFileSync(swFile, "utf8").replace("estatico-v3", "estatico-v4"));
   await p3.evaluate(async () => { await (await navigator.serviceWorker.getRegistration()).update(); });
   let waiting = false;
   for (let i = 0; i < 30 && !waiting; i++) { waiting = await p3.evaluate(async () => !!(await navigator.serviceWorker.getRegistration()).waiting); if (!waiting) await sleep(300); }
   const keysDuring = await p3.evaluate(() => caches.keys());
-  check("A1 Una versión nueva del SW queda en espera sin forzar la activación mientras la app está abierta", waiting && keysDuring.includes("ficha-privada-estatico-v2") && keysDuring.includes("ficha-privada-estatico-v3"), keysDuring.join(","));
+  check("A1 Una versión nueva del SW queda en espera sin forzar la activación mientras la app está abierta", waiting && keysDuring.includes("ficha-privada-estatico-v3") && keysDuring.includes("ficha-privada-estatico-v4"), keysDuring.join(","));
   await p3.close();
   p3 = await c3.newPage();
   let keysAfter = [];
-  for (let i = 0; i < 50; i++) { await p3.goto(srv3.base + "/"); keysAfter = (await p3.evaluate(() => caches.keys())).sort(); if (!keysAfter.includes("ficha-privada-estatico-v2")) break; await sleep(300); }
+  for (let i = 0; i < 50; i++) { await p3.goto(srv3.base + "/"); keysAfter = (await p3.evaluate(() => caches.keys())).sort(); if (!keysAfter.includes("ficha-privada-estatico-v3")) break; await sleep(300); }
   check("A2 Al reabrir se activa la versión nueva y se borra la caché antigua propia, sin tocar cachés ajenas",
-    JSON.stringify(keysAfter) === JSON.stringify(["ficha-privada-estatico-v3", "otra-app-cache"]), keysAfter.join(","));
+    JSON.stringify(keysAfter) === JSON.stringify(["ficha-privada-estatico-v4", "otra-app-cache"]), keysAfter.join(","));
   await br.close(); await srv3.close();
 
   const failed = results.filter((r) => r.ok === false);
