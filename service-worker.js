@@ -2,7 +2,7 @@
 
 // Caché solo de recursos estáticos de una lista cerrada. Nunca se guarda nada más.
 const CACHE_PREFIX = "ficha-privada-";
-const CACHE_NAME = CACHE_PREFIX + "estatico-v3";
+const CACHE_NAME = CACHE_PREFIX + "estatico-v4";
 
 const STATIC_FILES = [
   "./index.html",

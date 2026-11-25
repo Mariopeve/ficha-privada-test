@@ -8,7 +8,7 @@
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <meta name="robots" content="noindex, nofollow">
   <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#172554">
+  <meta name="theme-color" content="#F5EFE3">
   <meta name="description" content="Formulario local para preparar fichas y compartirlas manualmente.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,13 +45,13 @@
           <label class="field"><span>DNI</span><input id="campo-04" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="DNI / NIE"></label>
           <label class="field"><span>Teléfono</span><input id="campo-05" type="text" inputmode="tel" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Número de teléfono"></label>
           <label class="field full"><span>Dirección</span><input id="campo-06" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Dirección completa"></label>
-          <label class="field"><span>Fecha de nacimiento</span><input id="campo-07" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Fecha de nacimiento"></label>
+          <label class="field"><span>Fecha de nacimiento</span><input id="campo-07" type="date" max="9999-12-31" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="next"></label>
           <label class="field"><span>Lugar de nacimiento</span><input id="campo-08" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Lugar de nacimiento"></label>
           <label class="field"><span>Matrícula</span><input id="campo-09" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Matrícula"></label>
           <label class="field"><span>Correo electrónico</span><input id="campo-10" type="text" inputmode="email" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="correo@ejemplo.com"></label>
           <label class="field"><span>N.º de póliza</span><input id="campo-11" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Número de póliza"></label>
           <label class="field"><span>Compañía</span><input id="campo-12" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre de la compañía"></label>
-          <label class="field full"><span>Validez permiso</span><input id="campo-13" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Fecha de validez"></label>
+          <label class="field full"><span>Validez permiso</span><input id="campo-13" type="date" max="9999-12-31" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="next"></label>
           <label class="field"><span>Nombre padre</span><input id="campo-14" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre del padre"></label>
           <label class="field"><span>Nombre madre</span><input id="campo-15" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre de la madre"></label>
           <label class="field"><span>Municipio</span><input id="campo-16" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Municipio"></label>
@@ -74,7 +74,6 @@
       <div class="result-card">
         <div class="result-heading">
           <div><p class="eyebrow">VISTA PREVIA</p><h3>Texto que se va a compartir</h3></div>
-          <span class="local-tag">Solo en este dispositivo</span>
         </div>
         <pre id="result-text" class="result-text"></pre>
       </div>
@@ -84,7 +83,6 @@
         <button class="button button-quiet" id="new-button" type="button">Nueva ficha · borrar datos</button>
       </div>
       <p id="status" class="status" role="status" aria-live="polite"></p>
-      <p class="local-note">Al compartir, el menú de iOS y la aplicación que elijas reciben el texto. Comprueba el destinatario antes de enviarlo.</p>
     </section>
 
     <footer>Ficha privada · No almacena historiales</footer>
