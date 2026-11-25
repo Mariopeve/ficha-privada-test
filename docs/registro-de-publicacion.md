@@ -2,9 +2,7 @@
 
 ## Estado actual
 
-**PREPARADA, NO PUBLICADA.** (Actualizado el 25-11-2026.)
-La publicación no ha podido completarse desde el entorno de trabajo porque no tenía credenciales válidas de GitHub para
-crear el repositorio ni activar Pages. Los pasos pendientes están en la sección 4.
+**PUBLICADA** (Actualizado el 25-11-2026.)
 
 ## 1. Datos de la versión
 
@@ -12,7 +10,7 @@ crear el repositorio ni activar Pages. Los pasos pendientes están en la secció
 |---|---|
 | Aplicación | Ficha privada (PWA) |
 | Versión publicable | **0.2.0-test** (etiqueta Git `v0.2.0-test`) |
-| Caché del Service Worker | `ficha-privada-estatico-v2` |
+| Caché del Service Worker | `ficha-privada-estatico-v3` |
 | Fecha de preparación | 25-11-2026 |
 | Fecha de publicación | _pendiente: ____-__-__ __:__ (Europe/Madrid)_ |
 | Repositorio | _pendiente_ |
@@ -68,3 +66,4 @@ que no la indexen (es una petición, no una garantía).
 | 25-11-2026 | Revisión de datos personales y secretos | Sin hallazgos |
 | 25-11-2026 | Copia de seguridad del proyecto | Realizada (ver chat) |
 | 25-11-2026 | Publicación en GitHub Pages | **No realizada** (falta repositorio/credenciales) |
+| 25-11-2026 | Actualización de interfaz: 17 campos, sin «Sin cuenta» ni «Qué no controla», caché `v3` | Preparada en el proyecto, **sin commit ni publicación** |
