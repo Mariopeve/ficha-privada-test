@@ -18,8 +18,8 @@ Fecha: 24-11-2026 · Versión: Hito 2
 
 | Bloque | Resultado |
 |---|---|
-| Auditoría estática (`static-audit.js`) | **114 de 114** correctas |
-| Pruebas de navegador (`e2e.js`) | **52 de 52** correctas, 0 fallidas |
+| Auditoría estática (`static-audit.js`) | **121 de 121** correctas |
+| Pruebas de navegador (`e2e.js`) | **58 de 58** correctas, 0 fallidas |
 | Pruebas en iPhone real | **0 ejecutadas, 3 comprobaciones críticas + extras pendientes** |
 
 ## 3. Pruebas EJECUTADAS (en Chromium)
@@ -27,8 +27,10 @@ Fecha: 24-11-2026 · Versión: Hito 2
 ### Funcionales
 | ID | Prueba | Resultado |
 |---|---|---|
-| F0 | Las 13 etiquetas visibles coinciden con la lista acordada | Correcto |
-| F1, F1b | Formulario vacío: finaliza y muestra las 13 etiquetas sin contenido | Correcto |
+| F0 | Las 17 etiquetas visibles coinciden en texto y orden con la lista acordada | Correcto |
+| F1, F1b | Formulario vacío: finaliza y muestra las 17 etiquetas sin contenido | Correcto |
+| F2c, F2d | Exactamente 17 campos de texto; sin «Sin cuenta» ni «Qué no controla»; se conserva el aviso de que los datos no se guardan ni se envían | Correcto |
+| F2e | Los 4 pares de campos separados (fecha/lugar de nacimiento, póliza/compañía, padre/madre, municipio/provincia) son independientes, en ambos sentidos | Correcto |
 | F2, F2b | Formulario parcial; al volver a modificar se conservan los datos | Correcto |
 | F3, F3b | Formulario completo con tildes, ñ, símbolos y HTML (se muestra como texto) | Correcto |
 | F4, F4b, F4c | Copiar con Clipboard API: contenido exacto, confirmación visual, sin afirmar borrado | Correcto |
@@ -48,7 +50,7 @@ Fecha: 24-11-2026 · Versión: Hito 2
 | N2–N6 | La CSP bloquea fetch (incluso al propio origen), WebSocket, imágenes, iframes, scripts y formularios externos | Correcto |
 | N7, N8 | Las peticiones externas provocadas se bloquean por CSP y ninguna se completa; la página no sale de la app | Correcto |
 | S1–S3 | `localStorage`, `sessionStorage`, cookies e IndexedDB vacíos | Correcto |
-| S4–S6 | Cache API: solo `ficha-privada-estatico-v2` con exactamente los 7 recursos; sin datos en URL ni cuerpo | Correcto |
+| S4–S6 | Cache API: solo `ficha-privada-estatico-v3` con exactamente los 7 recursos; sin datos en URL ni cuerpo | Correcto |
 | S7–S9 | Rutas no incluidas y parámetros de URL: ni se cachean ni llegan al servidor con datos | Correcto |
 | S10, S11 | Ninguna petición recibida por el servidor contiene datos; todas son GET estáticas | Correcto |
 | S12, U1 | Consola, errores y 14 textos de aviso/botón sin datos | Correcto |
@@ -63,9 +65,15 @@ Fecha: 24-11-2026 · Versión: Hito 2
 
 ### Estáticas (resumen de los 114 controles)
 Sin APIs de red ni de almacenamiento, sin `console`, `eval` ni `innerHTML`; `fetch` solo en el Service Worker;
-sin scripts, estilos, manejadores ni enlaces inline; 13 campos con `autocomplete="off"`; CSP completa y sin `unsafe-*`;
+sin scripts, estilos, manejadores ni enlaces inline; 17 campos con `autocomplete="off"`, etiquetas y orden exactos, sin los elementos eliminados; CSP completa y sin `unsafe-*`;
 metadatos iOS; lista del Service Worker coincide con los archivos y con lo que carga `index.html`;
 iconos de 180, 192 y 512 px, con el de 180 opaco; manifest correcto.
+
+### Adaptaciones por la actualización a 17 campos
+- Las pruebas existentes se adaptaron (13 → 17 campos y nuevas etiquetas); **no se eliminó ninguna**. Se añadieron F2c–F2e y 7 controles estáticos.
+- La caché del Service Worker pasa de `v2` a `v3` (y las pruebas de actualización de `v3`/`v4`), para que los dispositivos con la 0.2.0 reciban los cambios.
+- Comprobado en Chromium: un cliente con la 0.2.0 instalada (13 campos, caché `v2`) pasa a 17 campos y a la caché `v3`, y se elimina la `v2`.
+- Estos resultados corresponden a Chromium; **las pruebas de iOS (P1–P10) siguen pendientes**.
 
 ### Defectos hallados durante las pruebas (corregidos)
 - Un comentario del Service Worker disparó un falso positivo de la auditoría: reformulado.
@@ -108,7 +116,7 @@ navegadores (Firefox, WebKit).
 |---|---|---|
 | 1 | Se puede instalar desde Safari en el iPhone | **Pendiente** (P4) |
 | 2 | Se puede abrir desde la pantalla de inicio | **Pendiente** (P4) |
-| 3 | Funcionan los 13 campos | Verificado en Chromium |
+| 3 | Funcionan los 17 campos | Verificado en Chromium |
 | 4 | Todos los campos son opcionales | Verificado en Chromium |
 | 5 | Se muestran los campos vacíos | Verificado en Chromium |
 | 6 | Se puede copiar el texto | Verificado en Chromium; **iOS pendiente** (P10) |

@@ -28,7 +28,6 @@
         <p class="eyebrow">HERRAMIENTA LOCAL</p>
         <h1>Ficha privada</h1>
       </div>
-      <span class="privacy-pill"><span></span> Sin cuenta</span>
     </header>
 
     <noscript><p class="noscript">Esta aplicación necesita JavaScript para generar la ficha.</p></noscript>
@@ -44,15 +43,19 @@
           <label class="field full"><span>Implicado</span><input id="campo-02" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Escribe el implicado"></label>
           <label class="field full"><span>Nombre</span><input id="campo-03" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre y apellidos"></label>
           <label class="field"><span>DNI</span><input id="campo-04" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="DNI / NIE"></label>
-          <label class="field"><span>Tfno</span><input id="campo-05" type="text" inputmode="tel" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Número de teléfono"></label>
+          <label class="field"><span>Teléfono</span><input id="campo-05" type="text" inputmode="tel" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Número de teléfono"></label>
           <label class="field full"><span>Dirección</span><input id="campo-06" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Dirección completa"></label>
-          <label class="field full"><span>F.Nac y lugar nac</span><input id="campo-07" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Fecha y lugar de nacimiento"></label>
-          <label class="field"><span>Matrícula</span><input id="campo-08" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Matrícula"></label>
-          <label class="field"><span>Correo electrónico</span><input id="campo-09" type="text" inputmode="email" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="correo@ejemplo.com"></label>
-          <label class="field full"><span>N.º póliza y compañía</span><input id="campo-10" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Número de póliza y compañía"></label>
-          <label class="field full"><span>Validez permiso</span><input id="campo-11" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Fecha de validez"></label>
-          <label class="field full"><span>Nombres padre y madre</span><input id="campo-12" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre del padre y de la madre"></label>
-          <label class="field full"><span>Municipio y provincia</span><input id="campo-13" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Municipio y provincia"></label>
+          <label class="field"><span>Fecha de nacimiento</span><input id="campo-07" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Fecha de nacimiento"></label>
+          <label class="field"><span>Lugar de nacimiento</span><input id="campo-08" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Lugar de nacimiento"></label>
+          <label class="field"><span>Matrícula</span><input id="campo-09" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Matrícula"></label>
+          <label class="field"><span>Correo electrónico</span><input id="campo-10" type="text" inputmode="email" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="correo@ejemplo.com"></label>
+          <label class="field"><span>N.º de póliza</span><input id="campo-11" type="text" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="next" placeholder="Número de póliza"></label>
+          <label class="field"><span>Compañía</span><input id="campo-12" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre de la compañía"></label>
+          <label class="field full"><span>Validez permiso</span><input id="campo-13" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="Fecha de validez"></label>
+          <label class="field"><span>Nombre padre</span><input id="campo-14" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre del padre"></label>
+          <label class="field"><span>Nombre madre</span><input id="campo-15" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Nombre de la madre"></label>
+          <label class="field"><span>Municipio</span><input id="campo-16" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="next" placeholder="Municipio"></label>
+          <label class="field"><span>Provincia</span><input id="campo-17" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" placeholder="Provincia"></label>
         </div>
         <div class="form-actions">
           <button class="button button-primary" type="submit">Finalizar <span aria-hidden="true">→</span></button>
@@ -60,16 +63,6 @@
         </div>
       </form>
       <p class="local-note">Los datos solo existen en esta pantalla mientras la usas. Esta aplicación no los guarda ni los envía a ningún servidor.</p>
-      <details class="notice">
-        <summary>Qué no controla esta aplicación</summary>
-        <ul>
-          <li>El teclado de iOS puede tener sus propias sugerencias.</li>
-          <li>Las capturas de pantalla pueden mostrar los datos.</li>
-          <li>El portapapeles conserva el texto copiado hasta que lo sustituyas.</li>
-          <li>Telegram, WhatsApp y otras aplicaciones gestionan lo que reciben según sus propias políticas. Una vez entregado el texto, no se puede garantizar su borrado.</li>
-          <li>El alojamiento de la web puede registrar datos técnicos de la visita (IP, recursos solicitados), pero nunca el contenido del formulario.</li>
-        </ul>
-      </details>
     </section>
 
     <section id="result-view" class="view" hidden>

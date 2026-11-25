@@ -1,6 +1,6 @@
 # Informe de privacidad — Ficha privada
 
-Fecha: 24-11-2026 · Versión evaluada: Hito 2 (caché `ficha-privada-estatico-v2`)
+Fecha: 24-11-2026 · Versión evaluada: Hito 2 (caché `ficha-privada-estatico-v3`)
 
 > **Estado de validación: NO completamente validada.** Los controles descritos están implementados y
 > verificados en Chromium y por revisión de código. Falta confirmar en un iPhone real el comportamiento
@@ -8,7 +8,7 @@ Fecha: 24-11-2026 · Versión evaluada: Hito 2 (caché `ficha-privada-estatico-v
 
 ## 1. Alcance
 
-La aplicación es un formulario de 13 campos que genera un texto plano para copiar o compartir.
+La aplicación es un formulario de 17 campos que genera un texto plano para copiar o compartir.
 Puede contener datos personales de terceros (DNI, direcciones, teléfonos, fechas de nacimiento,
 datos familiares, pólizas). Este informe describe adónde pueden llegar esos datos y qué controles existen.
 
@@ -44,6 +44,9 @@ Teclado de iOS → campos del formulario (memoria de la página)
 | 11 | Protección ante accidentes | Confirmación en «Nueva ficha» y en «Vaciar formulario» | Pruebas F6, F6b–F6d |
 
 ## 4. Lo que la aplicación NO controla (riesgos residuales)
+
+> Desde la actualización de 17 campos, la aplicación ya **no muestra** estos avisos en pantalla (conserva solo el aviso breve de
+> que los datos no se guardan ni se envían). Los riesgos siguen existiendo y se documentan solo aquí y en el README.
 
 1. **Teclado de iOS:** puede tener sugerencias o aprendizaje propios. Se reducen con `autocomplete`,
    `autocorrect` y `spellcheck` desactivados y sin `name`, pero no se pueden garantizar. *Sin verificar en iPhone.*

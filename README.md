@@ -1,6 +1,6 @@
 # Ficha privada (PWA para iPhone)
 
-Formulario de 13 campos opcionales que genera un texto plano para copiar o compartir.
+Formulario de 17 campos opcionales que genera un texto plano para copiar o compartir.
 HTML, CSS y JavaScript vanilla. Sin backend, sin dependencias, sin compilación.
 
 > Estado: **Hito 2** (código, pruebas automáticas y documentación). **No está completamente validada:**
@@ -44,6 +44,9 @@ Las pruebas dinámicas se ejecutan en Chromium, **no en Safari/iOS**. Ver «Pend
 - Compartir usa `navigator.share({ text })`: solo texto, sin título, URL ni destinatario.
 
 ## Límites que la aplicación no controla
+
+> Estos avisos ya **no se muestran en la interfaz** de la aplicación (solo el aviso breve de que los datos no se guardan
+> ni se envían). Quedan documentados aquí y en `docs/informe-de-privacidad.md`.
 
 - El teclado de iOS puede tener sus propias sugerencias.
 - Las capturas de pantalla pueden mostrar los datos.

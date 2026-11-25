@@ -14,15 +14,19 @@
     ["campo-02", "Implicado"],
     ["campo-03", "Nombre"],
     ["campo-04", "DNI"],
-    ["campo-05", "Tfno"],
+    ["campo-05", "Teléfono"],
     ["campo-06", "Dirección"],
-    ["campo-07", "F.Nac y lugar nac"],
-    ["campo-08", "Matrícula"],
-    ["campo-09", "Correo electrónico"],
-    ["campo-10", "N.º póliza y compañía"],
-    ["campo-11", "Validez permiso"],
-    ["campo-12", "Nombres padre y madre"],
-    ["campo-13", "Municipio y provincia"]
+    ["campo-07", "Fecha de nacimiento"],
+    ["campo-08", "Lugar de nacimiento"],
+    ["campo-09", "Matrícula"],
+    ["campo-10", "Correo electrónico"],
+    ["campo-11", "N.º de póliza"],
+    ["campo-12", "Compañía"],
+    ["campo-13", "Validez permiso"],
+    ["campo-14", "Nombre padre"],
+    ["campo-15", "Nombre madre"],
+    ["campo-16", "Municipio"],
+    ["campo-17", "Provincia"]
   ];
 
   // Únicos textos que se muestran como aviso: constantes, sin datos de la ficha.
