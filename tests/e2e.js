@@ -16,8 +16,11 @@ const LABELS = [
 const SENT = "ZZSENTINEL-4F7K";
 const FULL = LABELS.map((_, i) => `${SENT}-${i + 1} Ñandú Çü ª º € “q” <b>&amp;</b> ¿?¡!`);
 FULL[2] = `   ${FULL[2]}   `; // comprobar recorte de espacios
+const DATE_IDX = [6, 12];
+FULL[6] = "1990-05-17";
+FULL[12] = "2030-12-31";
 const ids = LABELS.map((_, i) => `#campo-${String(i + 1).padStart(2, "0")}`);
-const CACHE_NAME = "ficha-privada-estatico-v3";
+const CACHE_NAME = "ficha-privada-estatico-v4";
 const STATIC = ["index.html", "css/styles.css", "js/app.js", "manifest.json", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 const results = [];
@@ -27,7 +30,8 @@ const check = (name, ok, detail = "") => {
 };
 const note = (name, detail) => { results.push({ name, ok: null, detail }); console.log(`INFO  ${name}  [${detail}]`); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const expectedText = (vals) => LABELS.map((l, i) => (vals[i].trim() ? `${l}: ${vals[i].trim()}` : `${l}:`)).join("\n");
+const shown = (vals, i) => (DATE_IDX.includes(i) ? vals[i].split("-").reverse().join("/") : vals[i].trim());
+const expectedText = (vals) => LABELS.map((l, i) => (shown(vals, i) ? `${l}: ${shown(vals, i)}` : `${l}:`)).join("\n");
 
 async function fillAll(page, vals) { for (let i = 0; i < ids.length; i++) await page.fill(ids[i], vals[i]); }
 const resultText = (page) => page.$eval("#result-text", (e) => e.textContent);
@@ -99,7 +103,9 @@ async function main() {
 
   await page.click("#edit-button");
   check("F2b Al volver a modificar se conservan los datos", (await page.inputValue(ids[2])) === "Ficticio Ejemplo");
-  check("F2c Exactamente 17 campos de entrada, todos de texto y vacíos de origen", (await page.$$("input")).length === 17 && (await page.$$("input[type=text]")).length === 17);
+  check("F2c Exactamente 17 campos de entrada: 15 de texto y 2 de fecha (campo-07 y campo-13)",
+  (await page.$$("input")).length === 17 && (await page.$$("input[type=text]")).length === 15 &&
+  (await page.$$("#campo-07[type=date], #campo-13[type=date]")).length === 2);
   check("F2d Se han eliminado la etiqueta «Sin cuenta» y el apartado «Qué no controla»; se conserva el aviso de datos",
     !/Sin cuenta|Qué no controla|sugerencias de iOS|políticas/.test(await page.content()) && (await page.$$("details")).length === 0 &&
     (await page.$eval(".local-note", (e) => e.textContent)).includes("no los guarda ni los envía a ningún servidor"));
@@ -109,8 +115,10 @@ async function main() {
   const PAIRS = [[6, 7], [10, 11], [13, 14], [15, 16]];
   for (const [a, b] of PAIRS) {
     let ok = true;
+    const vals = Array(LABELS.length).fill("");
     for (const [x, y] of [[a, b], [b, a]]) {
-      const vals = Array(LABELS.length).fill(""); vals[x] = "Valor ficticio " + LABELS[x];
+      vals.fill("");
+      vals[x] = DATE_IDX.includes(x) ? "1990-05-17" : "Valor ficticio " + LABELS[x];
       await page.fill(ids[x], vals[x]);
       const otherEmpty = (await page.inputValue(ids[y])) === "";
       await page.click("button[type=submit]");
@@ -277,7 +285,7 @@ async function main() {
       test("permitidaConQuery", "/icons/icon-192.png?dato=ZZSENTINEL-4F7K")
     ]).then(() => resolve(out));
   }));
-  const cacheAfter = await page.evaluate(async () => (await (await caches.open("ficha-privada-estatico-v3")).keys()).map((r) => r.url));
+  const cacheAfter = await page.evaluate(async () => (await (await caches.open("ficha-privada-estatico-v4")).keys()).map((r) => r.url));
   check("S7 Ruta no incluida en la lista: el SW responde sin ir a la red ni guardarla", probe.noPermitida === "error" && !srv.log.slice(logLenBefore).some((l) => l.includes("control.html")));
   check("S8 Recurso estático con parámetros: se sirve de caché, no llega al servidor y no se guarda con el parámetro",
     probe.permitidaConQuery === "ok" && !srv.log.slice(logLenBefore).some((l) => l.includes("ZZSENTINEL")) && cacheAfter.length === 7 && cacheAfter.every((u) => !u.includes("?")));
@@ -345,18 +353,18 @@ async function main() {
   await p3.reload();
   await p3.evaluate(() => caches.open("otra-app-cache"));
   const swFile = path.join(upd, "service-worker.js");
-  fs.writeFileSync(swFile, fs.readFileSync(swFile, "utf8").replace("estatico-v3", "estatico-v4"));
+  fs.writeFileSync(swFile, fs.readFileSync(swFile, "utf8").replace("estatico-v4", "estatico-v5"));
   await p3.evaluate(async () => { await (await navigator.serviceWorker.getRegistration()).update(); });
   let waiting = false;
   for (let i = 0; i < 30 && !waiting; i++) { waiting = await p3.evaluate(async () => !!(await navigator.serviceWorker.getRegistration()).waiting); if (!waiting) await sleep(300); }
   const keysDuring = await p3.evaluate(() => caches.keys());
-  check("A1 Una versión nueva del SW queda en espera sin forzar la activación mientras la app está abierta", waiting && keysDuring.includes("ficha-privada-estatico-v3") && keysDuring.includes("ficha-privada-estatico-v4"), keysDuring.join(","));
+  check("A1 Una versión nueva del SW queda en espera sin forzar la activación mientras la app está abierta", waiting && keysDuring.includes("ficha-privada-estatico-v4") && keysDuring.includes("ficha-privada-estatico-v5"), keysDuring.join(","));
   await p3.close();
   p3 = await c3.newPage();
   let keysAfter = [];
-  for (let i = 0; i < 50; i++) { await p3.goto(srv3.base + "/"); keysAfter = (await p3.evaluate(() => caches.keys())).sort(); if (!keysAfter.includes("ficha-privada-estatico-v3")) break; await sleep(300); }
+  for (let i = 0; i < 50; i++) { await p3.goto(srv3.base + "/"); keysAfter = (await p3.evaluate(() => caches.keys())).sort(); if (!keysAfter.includes("ficha-privada-estatico-v4")) break; await sleep(300); }
   check("A2 Al reabrir se activa la versión nueva y se borra la caché antigua propia, sin tocar cachés ajenas",
-    JSON.stringify(keysAfter) === JSON.stringify(["ficha-privada-estatico-v4", "otra-app-cache"]), keysAfter.join(","));
+    JSON.stringify(keysAfter) === JSON.stringify(["ficha-privada-estatico-v5", "otra-app-cache"]), keysAfter.join(","));
   await br.close(); await srv3.close();
 
   const failed = results.filter((r) => r.ok === false);

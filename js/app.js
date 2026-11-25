@@ -57,9 +57,18 @@
     status.textContent = message;
   }
 
+  // Campos de fecha: el navegador entrega AAAA-MM-DD; en el texto se muestra DD/MM/AAAA.
+  const DATE_FIELDS = new Set(["campo-07", "campo-13"]);
+
+  function formatDate(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : iso;
+  }
+
   function makeText() {
-    return FIELDS.map(([, label], i) => {
-      const value = inputs[i].value.trim();
+    return FIELDS.map(([id, label], i) => {
+      const raw = inputs[i].value.trim();
+      const value = DATE_FIELDS.has(id) ? formatDate(raw) : raw;
       return value ? `${label}: ${value}` : `${label}:`;
     }).join("\n");
   }
