@@ -71,7 +71,7 @@
     return FIELDS.map(([id, label], i) => {
       const raw = inputs[i].value.trim();
       const value = DATE_FIELDS.has(id) ? formatDate(raw) : raw;
-      return value ? `${label}: ${value}` : `${label}:`;
+      return value ? `*${label}:* ${value}` : `*${label}:*`;
     }).join("\n");
   }
 
