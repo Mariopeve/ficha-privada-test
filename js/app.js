@@ -234,10 +234,25 @@
   window.addEventListener("pageshow", wipe);
   window.addEventListener("pagehide", wipe);
 
-  // Service Worker: solo en contexto seguro (HTTPS o localhost).
+
+  // Service Worker: actualización automática de recursos estáticos.
   if ("serviceWorker" in navigator && window.isSecureContext) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js", { scope: "./" }).catch(() => {});
+    window.addEventListener("load", async () => {
+      try {
+        const registration = await navigator.serviceWorker.register(
+          "./service-worker.js",
+          {
+            scope: "./",
+            updateViaCache: "none"
+          }
+        );
+  
+        // Comprueba si existe una versión nueva al abrir la aplicación.
+        await registration.update();
+  
+      } catch (_) {
+        // La aplicación sigue funcionando aunque falle la comprobación.
+      }
     });
   }
 })();
